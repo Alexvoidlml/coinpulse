@@ -4,41 +4,46 @@ import Link from "next/link";
 import Image from "next/image";
 import {usePathname} from "next/navigation";
 import { cn } from "@/lib/utils";
+import Search from "./Search";
+import { HeaderProps } from "@/type.d";
 
-
-const Header = () => {
+const Header = ({ trendingCoins }: HeaderProps) => {
     const pathname = usePathname();
     return (
-        <header>
-            <div className="main-container inner">
+        <header className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-md border-b border-white/5">
+            <div className="main-container flex items-center justify-between h-16 px-4 lg:px-10">
 
-                <Link href="/">
-                    <Image
-                        src="/logo.svg"
-                        alt="CoinPulse logo"
-                        width={50}
-                        height={50}
-                    />
-                </Link>
+                <div className="flex items-center gap-8">
+                    <Link href="/" className="flex items-center gap-2">
+                        <Image
+                            src="/logo.svg"
+                            alt="CoinPulse logo"
+                            width={32}
+                            height={32}
+                        />
+                        <span className="font-bold text-xl tracking-tight hidden sm:block">CoinPulse</span>
+                    </Link>
 
-                <nav>
-                    <Link
-                        href="/"
-                        className={cn("nav-link", {
-                            "is-active": pathname === "/",
-                            "is-home": true
-                        })}
-                    >Home</Link>
+                    <nav className="hidden md:flex items-center gap-6">
+                        <Link
+                            href="/"
+                            className={cn("text-sm font-medium transition-colors hover:text-white", 
+                                pathname === "/" ? "text-white" : "text-gray-400"
+                            )}
+                        >Home</Link>
 
-                    <p>Search Modal</p>
+                        <Link
+                            href="/coins"
+                            className={cn("text-sm font-medium transition-colors hover:text-white",
+                                pathname === "/coins" ? "text-white" : "text-gray-400"
+                            )}
+                        >All Coins</Link>
+                    </nav>
+                </div>
 
-                    <Link
-                        href="/coins"
-                        className={cn("nav-link", {
-                            "is-active": pathname === "/coins",
-                        })}
-                    >All Coins</Link>
-                </nav>
+                <div className="flex items-center gap-4">
+                    <Search trendingCoins={trendingCoins} />
+                </div>
 
             </div>
         </header>
