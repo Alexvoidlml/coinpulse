@@ -24,7 +24,7 @@ const columns = [
     cell: ({ row }: { row: { original: CoinMarketData } }) => {
       const coin = row.original;
       return (
-        <Link href={`/coins/${coin.id}`} className="flex items-center gap-2 hover:underline">
+        <Link href={`/?coin=${coin.id}`} className="flex items-center gap-2 hover:underline">
           <Image src={coin.image} alt={coin.name} width={24} height={24} className="rounded-full" />
           <div className="flex flex-col">
             <p className="font-medium text-sm">{coin.name}</p>
@@ -47,7 +47,16 @@ const columns = [
     },
   },
   {
-    header: "24h Change",
+    header: "24h Change ($)",
+    accessorKey: "price_change_24h",
+    cell: ({ row }: { row: { original: CoinMarketData } }) => {
+      const change = row.original.price_change_24h;
+      const isPositive = (change ?? 0) >= 0;
+      return <p className={isPositive ? "text-green-500" : "text-red-500"}>{isPositive ? "+" : "-"}${Math.abs(change ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>;
+    },
+  },
+  {
+    header: "Daily Change (%)",
     accessorKey: "price_change_percentage_24h",
     cell: ({ row }: { row: { original: CoinMarketData } }) => {
       const change = row.original.price_change_percentage_24h;

@@ -154,21 +154,22 @@ export interface ExtendedPriceData {
 
 export interface WebSocketMessage {
     type?: string;
-    c?: string;
+    c?: number; // Close price / Current price
     ch?: string;
     i?: string;
-    p?: number;
+    p?: number; // Price
     pp?: number;
     pu?: number;
     m?: number;
-    v?: number;
+    v?: number; // Volume
     vo?: number;
-    o?: number;
-    h?: number;
-    l?: number;
-    t?: number;
+    o?: number; // Open
+    h?: number; // High
+    l?: number; // Low
+    t?: number; // Timestamp
     to?: number;
     ty?: string;
+    s?: string; // Side (buy/sell)
     channel?: string;
     identifier?: string;
 }

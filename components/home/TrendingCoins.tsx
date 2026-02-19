@@ -13,7 +13,7 @@ const columns = [
             const { item } = row.original;
             return (
                 <Link
-                    href={`/coins/${item.id}`}
+                    href={`/?coin=${item.id}`}
                     className="flex items-center gap-2 hover:underline"
                 >
                     <Image
@@ -52,7 +52,27 @@ const columns = [
         },
     },
     {
-        header: "24h Change",
+        header: "24h Change ($)",
+        accessorKey: "item.data.price_change_percentage_24h.usd",
+        cell: ({ row }: { row: { original: TrendingCoin } }) => {
+            const price = row.original.item.data.price;
+            const changePct = row.original.item.data.price_change_percentage_24h.usd;
+            // Cálculo aproximado: el cambio en $ basado en el precio actual y el cambio porcentual
+            // Si el precio de ayer fuera P, el de hoy es P * (1 + changePct/100) = currentPrice
+            // P = currentPrice / (1 + changePct/100)
+            // changeAbs = currentPrice - P = currentPrice - (currentPrice / (1 + changePct/100))
+            const prevPrice = price / (1 + changePct / 100);
+            const changeAbs = price - prevPrice;
+            const isPositive = changeAbs >= 0;
+            return (
+                <p className={isPositive ? "text-green-500" : "text-red-500 font-medium"}>
+                    {isPositive ? "+" : "-"}${Math.abs(changeAbs).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })}
+                </p>
+            );
+        },
+    },
+    {
+        header: "Daily Change (%)",
         accessorKey: "item.data.price_change_percentage_24h.usd",
         cell: ({ row }: { row: { original: TrendingCoin } }) => {
             const change = row.original.item.data.price_change_percentage_24h.usd;
@@ -68,9 +88,9 @@ const columns = [
 
 const TrendingCoins = ({ trendingCoins }: { trendingCoins: TrendingCoin[] }) => {
     return (
-        <div className="mt-12">
-            <h2 className="text-xl font-bold mb-6 tracking-tight">Trending Coins</h2>
-            <div className="bg-[#171717] border border-white/5 rounded-2xl overflow-hidden">
+        <div className="mt-8">
+            <h2 className="text-xl font-bold mb-4 text-white uppercase">Trending Assets</h2>
+            <div className="bg-black/40 border border-white/10 rounded-xl overflow-hidden shadow-lg">
                 <DataTable
                     columns={columns}
                     data={trendingCoins}

@@ -10,8 +10,7 @@ const SearchItem = ({ coin, onSelect, isActiveName }: SearchItemProps) => {
 
     const handleClick = () => {
         onSelect(coin.id);
-        // Use window.location or router.push, but for search items we usually want to close dialog and navigate
-        router.push(`/coins/${coin.id}`);
+        router.push(`/?coin=${coin.id}`);
     };
 
     const getCoinIcon = () => {
